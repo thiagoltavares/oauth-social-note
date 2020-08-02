@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { initialPosts } from './mocks/posts';
+import { IPostData } from './types';
+import Posts from './components/Posts';
 
-function App() {
+const App: React.FC = () => {
+  const [posts, setPosts] = useState<IPostData[]>(initialPosts);
+
+  const handleCreatePost = (post: IPostData) => {
+    setPosts([...posts, post]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <h1>Deixe Me Uma Nota</h1>
+      <Posts posts={posts} onCreate={handleCreatePost} />
+    </main>
   );
-}
+};
 
 export default App;
