@@ -1,16 +1,17 @@
 import React from 'react';
+// import moment from 'moment';
 import { IPostData } from '../../interfaces';
+import { firestore } from '../../config/firebase';
 
 type postData = {
   post: IPostData;
-  onRemove: (values: string) => void;
 };
 
-const Post: React.FC<postData> = ({
-  post: { id, content, title, comments, stars, user },
-  onRemove,
-}: postData) => {
-  const star = () => console.log('stars: ', id);
+const Post: React.FC<postData> = ({ post }: postData) => {
+  const { id, content, title, comments, stars, user } = post;
+  const postRef = firestore.doc(`posts/${id}`);
+  const handleRemove = () => postRef.delete();
+  const star = () => postRef.update({ stars: stars + 1 });
 
   return (
     <article className="Post">
@@ -40,7 +41,7 @@ const Post: React.FC<postData> = ({
           <button type="button" className="star" onClick={star}>
             Star
           </button>
-          <button type="button" className="delete" onClick={() => onRemove(id)}>
+          <button type="button" className="delete" onClick={handleRemove}>
             Delete
           </button>
         </div>

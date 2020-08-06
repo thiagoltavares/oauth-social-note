@@ -3,10 +3,8 @@ import { Button, TextField, Grid } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { ICreatePostData } from '../../interfaces';
-
-interface AddPostProps {
-  onCreate: (values: ICreatePostData) => void;
-}
+import { firestore } from '../../config/firebase';
+import { PostConverter } from '../../utils/firebasePostConverter';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const AddPost: React.FC<AddPostProps> = ({ onCreate }) => {
+const AddPost: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -41,7 +39,7 @@ const AddPost: React.FC<AddPostProps> = ({ onCreate }) => {
       comments: 0,
     };
 
-    onCreate(post);
+    firestore.collection('posts').withConverter(PostConverter).add(post);
 
     setContent('');
     setTitle('');
