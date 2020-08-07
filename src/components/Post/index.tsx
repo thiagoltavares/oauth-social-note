@@ -1,14 +1,19 @@
 import React from 'react';
-// import moment from 'moment';
+import moment from 'moment';
 import { IPostData } from '../../interfaces';
 import { firestore } from '../../config/firebase';
 
 type postData = {
   post: IPostData;
 };
-
-const Post: React.FC<postData> = ({ post }: postData) => {
-  const { id, content, title, comments, stars, user } = post;
+declare global {
+  interface Date {
+    toDate: () => Date;
+    seconds: number;
+  }
+}
+const Post: React.FC<postData> = ({ post }) => {
+  const { id, content, title, comments, stars, user, createdAt } = post;
   const postRef = firestore.doc(`posts/${id}`);
   const handleRemove = () => postRef.delete();
   const star = () => postRef.update({ stars: stars + 1 });
@@ -35,7 +40,7 @@ const Post: React.FC<postData> = ({ post }: postData) => {
             {comments}
           </p>
           <p>Posted by {user.displayName}</p>
-          {/* <p>{moment(createdAt.toDate()).calendar()}</p> */}
+          <p>{moment(createdAt.toDate()).calendar()}</p>
         </div>
         <div>
           <button type="button" className="star" onClick={star}>

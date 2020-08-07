@@ -5,12 +5,13 @@ import AddPost from '../AddPost';
 
 interface PostsData {
   posts: IPostData[];
+  isSignedIn: boolean;
 }
 
-const Posts: React.FC<PostsData> = ({ posts }: PostsData) => {
+const Posts: React.FC<PostsData> = ({ posts, isSignedIn }) => {
   return (
     <section>
-      <AddPost />
+      <AddPost isSignedIn={isSignedIn} />
       {posts.map(post => (
         <Post post={post} key={post.id} />
       ))}

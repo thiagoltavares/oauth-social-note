@@ -12,6 +12,7 @@ export interface IPostData {
   user: IUserData;
   stars: number;
   comments: number;
+  createdAt: Date;
 }
 
 export interface ICreatePostData {
@@ -20,13 +21,5 @@ export interface ICreatePostData {
   user: IUserData;
   stars: number;
   comments: number;
-}
-
-export interface TruePost {
-  title: string;
-  content: string;
-  user: IUserData;
-  favorite: 0;
-  comments: 0;
   createdAt: Date;
 }

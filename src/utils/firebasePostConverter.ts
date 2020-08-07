@@ -8,6 +8,7 @@ export const PostConverter = {
       user: post.user,
       stars: post.stars,
       comments: post.comments,
+      createdAt: post.createdAt,
     };
   },
   fromFirestore(
@@ -22,6 +23,7 @@ export const PostConverter = {
       user: data.user,
       stars: data.stars,
       comments: data.comments,
+      createdAt: data.createdAt,
     };
   },
 };
