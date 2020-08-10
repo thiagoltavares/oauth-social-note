@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, TextField, Grid } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
 import { ICreatePostData } from '../../interfaces';
-import { firestore, googleProvider, auth } from '../../config/firebase';
+import { firestore } from '../../config/firebase';
 import { PostConverter } from '../../utils/firebasePostConverter';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,25 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const uiConfig = {
-  // Popup signin flow rather than redirect flow.
-  signInFlow: 'popup',
-  // We will display Google and Facebook as auth providers.
-  signInOptions: [
-    googleProvider,
-    // firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-  ],
-  callbacks: {
-    // Avoid redirects after sign-in.
-    signInSuccessWithAuthResult: () => false,
-  },
-};
-interface IAddPostProps {
-  isSignedIn: boolean;
-}
-
-const AddPost: React.FC<IAddPostProps> = ({ isSignedIn }) => {
+const AddPost: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
 
@@ -67,43 +49,39 @@ const AddPost: React.FC<IAddPostProps> = ({ isSignedIn }) => {
 
   return (
     <div>
-      {!isSignedIn ? (
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
-      ) : (
-        <form onSubmit={e => handleSubmit(e)}>
-          <Grid item container justify="center" direction="column">
-            <TextField
-              label="Título"
-              name="title"
-              value={title}
-              className={classes.textField}
-              onChange={e => {
-                setTitle(e.target.value);
-              }}
-            />
+      <form onSubmit={e => handleSubmit(e)}>
+        <Grid item container justify="center" direction="column">
+          <TextField
+            label="Título"
+            name="title"
+            value={title}
+            className={classes.textField}
+            onChange={e => {
+              setTitle(e.target.value);
+            }}
+          />
 
-            <TextField
-              label="Mensagem"
-              name="content"
-              value={content}
-              className={classes.textField}
-              onChange={e => {
-                setContent(e.target.value);
-              }}
-            />
+          <TextField
+            label="Mensagem"
+            name="content"
+            value={content}
+            className={classes.textField}
+            onChange={e => {
+              setContent(e.target.value);
+            }}
+          />
 
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              endIcon={<Icon>send</Icon>}
-            >
-              Criar Post
-            </Button>
-          </Grid>
-        </form>
-      )}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            endIcon={<Icon>send</Icon>}
+          >
+            Criar Post
+          </Button>
+        </Grid>
+      </form>
     </div>
   );
 };

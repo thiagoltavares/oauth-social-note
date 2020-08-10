@@ -3,9 +3,9 @@ import { Button, ButtonBase, Grid, Paper, Typography } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { IUserData } from '../../interfaces';
-import { signOut } from '../../config/firebase';
+import { auth } from '../../config/firebase';
 
-interface ICurrentUserProps {
+interface IUserCardProps {
   user: IUserData;
 }
 
@@ -38,13 +38,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const CurrentUser: React.FC<ICurrentUserProps> = ({ user }) => {
+const UserCard: React.FC<IUserCardProps> = ({ user }) => {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(true);
 
   const classes = useStyles();
 
   const handleSignOut = () => {
-    signOut();
+    auth.signOut();
     setIsSignedIn(false);
   };
 
@@ -93,4 +93,4 @@ const CurrentUser: React.FC<ICurrentUserProps> = ({ user }) => {
   );
 };
 
-export default CurrentUser;
+export default UserCard;

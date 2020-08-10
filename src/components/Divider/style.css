@@ -1,0 +1,15 @@
+.divide-container{
+  display: flex;
+    align-items: center;
+    margin: 20px 0;
+
+}
+
+.divide-border{
+  border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  width: 100%;
+}
+
+.divide-content {
+  padding: 0 10px 0 10px;
+}

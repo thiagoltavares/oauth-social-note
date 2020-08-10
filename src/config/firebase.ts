@@ -15,13 +15,30 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
-export const firestore = firebase.firestore();
-
 export const googleProvider = firebase.auth.GoogleAuthProvider.PROVIDER_ID;
 export const facebookProvider = firebase.auth.FacebookAuthProvider.PROVIDER_ID;
-
+export const firestore = firebase.firestore();
 export const auth = firebase.auth();
-export const signOut = (): Promise<void> => auth.signOut();
+
+const myGoogleProvider = new firebase.auth.GoogleAuthProvider();
+const myFacebookProvider = new firebase.auth.FacebookAuthProvider();
+
+// Google credentials signin
+export const firebaseSignInWithGoogle = (): Promise<
+  firebase.auth.UserCredential
+> => auth.signInWithPopup(myGoogleProvider);
+
+// Facebook credentials signin
+export const firebaseSignInWithFacebook = (): Promise<
+  firebase.auth.UserCredential
+> => auth.signInWithPopup(myFacebookProvider);
+
+// Create account with email and password
+export const firebaseCreateUserWithEmailAndPassword = (
+  email: string,
+  password: string,
+): Promise<firebase.auth.UserCredential> => {
+  return auth.createUserWithEmailAndPassword(email, password);
+};
 
 export default firebase;
