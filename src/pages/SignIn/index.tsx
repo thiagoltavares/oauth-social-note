@@ -38,10 +38,14 @@ const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const classes = useStyles();
-  const { signInWithGoogle, signInWithFacebook } = useAuth();
+  const {
+    signInWithGoogle,
+    signInWithFacebook,
+    signInWithEmailAndPassword,
+  } = useAuth();
 
   const handleSignIn = () => {
-    console.log('SignIn');
+    signInWithEmailAndPassword(email, password);
 
     setEmail('');
     setPassword('');
@@ -56,7 +60,13 @@ const SignIn: React.FC = () => {
             style={{ width: '200px', marginBottom: 10 }}
           />
           <h1 style={{ color: '#3f51b5' }}>Entrar</h1>
-          <Grid container className={classes.root} spacing={2} justify="center">
+          <Grid
+            container
+            className={classes.root}
+            spacing={2}
+            justify="center"
+            md={10}
+          >
             <Grid item xs={10} md={12}>
               <Grid container justify="center" spacing={2} direction="column">
                 <TextField
@@ -100,7 +110,7 @@ const SignIn: React.FC = () => {
                 <FacebookLoginButton
                   align="center"
                   onClick={signInWithFacebook}
-                  style={{ width: '100%', marginTop: 10 }}
+                  style={{ width: '100%', margin: 0, marginTop: 10 }}
                 >
                   <span>Entrar com Facebook</span>
                 </FacebookLoginButton>

@@ -6,6 +6,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { ICreatePostData } from '../../interfaces';
 import { firestore } from '../../config/firebase';
 import { PostConverter } from '../../utils/firebasePostConverter';
+import { useAuth } from '../../hooks/auth';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,19 +23,22 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddPost: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const { user } = useAuth();
 
   const classes = useStyles();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(!!title);
+
     const post: ICreatePostData = {
       title,
       content,
       user: {
-        uid: '111',
-        displayName: 'Thiago Maha',
-        email: 'maha@maha.com',
-        photoURL: 'https://api.adorable.io/avatars/200/maha.png',
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
       },
       stars: 0,
       comments: 0,

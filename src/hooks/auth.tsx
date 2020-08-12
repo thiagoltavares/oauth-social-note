@@ -5,7 +5,7 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import { IUserData } from '../interfaces';
+import { IUserData, AuthContextData } from '../interfaces';
 import {
   auth,
   firebaseSignInWithGoogle,
@@ -13,17 +13,6 @@ import {
   firebaseSignInWithFacebook,
   createUserProfileDocument,
 } from '../config/firebase';
-
-interface AuthContextData {
-  user: IUserData;
-  signOut: () => void;
-  signInWithGoogle: () => Promise<firebase.auth.UserCredential>;
-  signInWithFacebook: () => Promise<firebase.auth.UserCredential>;
-  createAccountWithEmailAndPassword: (
-    name: string,
-    password: string,
-  ) => Promise<firebase.auth.UserCredential>;
-}
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 let unregisterAuthObserver: () => void;
@@ -38,6 +27,18 @@ const AuthProvider: React.FC = ({ children }) => {
     () => firebaseSignInWithFacebook(),
     [],
   );
+
+  const signInWithEmailAndPassword = async (
+    email: string,
+    password: string,
+  ): Promise<firebase.auth.UserCredential> => {
+    const userCredential = await auth.signInWithEmailAndPassword(
+      email,
+      password,
+    );
+    return userCredential;
+  };
+
   const createAccountWithEmailAndPassword = useCallback(
     (email: string, password: string) =>
       firebaseCreateUserWithEmailAndPassword(email, password),
@@ -65,6 +66,7 @@ const AuthProvider: React.FC = ({ children }) => {
         signInWithGoogle,
         createAccountWithEmailAndPassword,
         signInWithFacebook,
+        signInWithEmailAndPassword,
       }}
     >
       {children}

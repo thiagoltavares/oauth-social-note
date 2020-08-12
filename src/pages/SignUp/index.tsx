@@ -65,7 +65,13 @@ const SignUp: React.FC = () => {
             style={{ width: '200px', marginBottom: 10 }}
           />
           <h1 style={{ color: '#3f51b5' }}>Criar Conta</h1>
-          <Grid container className={classes.root} spacing={2} justify="center">
+          <Grid
+            container
+            className={classes.root}
+            spacing={2}
+            justify="center"
+            md={10}
+          >
             <Grid item xs={10} md={12}>
               <form onSubmit={handleSignUp} autoComplete="off">
                 <Grid container justify="center" spacing={2} direction="column">

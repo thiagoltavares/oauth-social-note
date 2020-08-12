@@ -18,30 +18,25 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-// export const googleProvider = firebase.auth.GoogleAuthProvider.PROVIDER_ID;
-// export const facebookProvider = firebase.auth.FacebookAuthProvider.PROVIDER_ID;
+
 export const firestore = firebase.firestore();
 export const auth = firebase.auth();
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const facebookProvider = new firebase.auth.FacebookAuthProvider();
-const emailAndPasswordProvider = new firebase.auth.EmailAuthProvider();
 
 // Google credentials signin
-export const firebaseSignInWithGoogle = (): Promise<
+export const firebaseSignInWithGoogle = async (): Promise<
   firebase.auth.UserCredential
-> => auth.signInWithPopup(googleProvider);
+> => {
+  const userCredential = await auth.signInWithPopup(googleProvider);
+  return userCredential;
+};
 
 // Facebook credentials signin
 export const firebaseSignInWithFacebook = (): Promise<
   firebase.auth.UserCredential
 > => auth.signInWithPopup(facebookProvider);
-
-// Email and Password credentials signin
-// FIXME verificar como faz login com email e senha
-export const firebaseSignInWithMailAndPassword = (): Promise<
-  firebase.auth.UserCredential
-> => auth.signInWithPopup(emailAndPasswordProvider);
 
 // Create account with email and password
 export const firebaseCreateUserWithEmailAndPassword = (
@@ -78,9 +73,11 @@ export const getUserDocument = async (
   }
 };
 
+type aditionalData = { displayName: string; photoURL: string };
+
 export const createUserProfileDocument = async (
   user: firebase.User,
-  aditionalData?: any,
+  aditionalData?: aditionalData,
 ): Promise<ICreateUserData | void> => {
   if (!user) return;
 
