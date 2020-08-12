@@ -23,22 +23,23 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddPost: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const { user } = useAuth();
+  const {
+    currentUser: { displayName, photoURL, uid, email },
+  } = useAuth();
 
   const classes = useStyles();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(!!title);
 
     const post: ICreatePostData = {
       title,
       content,
       user: {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
+        uid,
+        displayName,
+        email,
+        photoURL,
       },
       stars: 0,
       comments: 0,

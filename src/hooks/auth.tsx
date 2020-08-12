@@ -61,7 +61,7 @@ const AuthProvider: React.FC = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
+        currentUser: user,
         signOut,
         signInWithGoogle,
         createAccountWithEmailAndPassword,

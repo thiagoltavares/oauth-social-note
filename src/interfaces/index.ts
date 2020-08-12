@@ -32,7 +32,7 @@ export interface ICreatePostData {
 }
 
 export interface AuthContextData {
-  user: IUserData;
+  currentUser: IUserData;
   signOut: () => void;
   signInWithGoogle: () => Promise<firebase.auth.UserCredential>;
   signInWithFacebook: () => Promise<firebase.auth.UserCredential>;

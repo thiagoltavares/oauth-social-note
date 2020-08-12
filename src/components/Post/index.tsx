@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { IPostData, IUserData, AuthContextData } from '../../interfaces';
+import { IPostData, IUserData } from '../../interfaces';
 import { firestore } from '../../config/firebase';
 import { useAuth } from '../../hooks/auth';
 
@@ -15,19 +15,18 @@ declare global {
 }
 
 const belongingToCurrentUser = (
-  currentUser: AuthContextData,
+  currentUser: IUserData,
   postUser: IUserData,
 ): boolean => {
   if (!currentUser) {
     return false;
   }
-
-  return currentUser.user.uid === postUser.uid;
+  return currentUser.uid === postUser.uid;
 };
 
 const Post: React.FC<postData> = ({ post }) => {
   const { id, content, title, comments, stars, user, createdAt } = post;
-  const currentUser = useAuth();
+  const { currentUser } = useAuth();
   const postRef = firestore.doc(`posts/${id}`);
   const handleRemove = () => postRef.delete();
   const star = () => postRef.update({ stars: stars + 1 });

@@ -6,11 +6,11 @@ import AddPost from '../../components/AddPost';
 import UserCard from '../../components/UserCard';
 
 const Posts: React.FC = () => {
-  const { user } = useAuth();
+  const { currentUser } = useAuth();
 
   return (
     <>
-      <UserCard user={user} />
+      <UserCard user={currentUser} />
       <AddPost />
       <PostsList />
     </>
