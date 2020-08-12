@@ -5,6 +5,13 @@ export interface IUserData {
   photoURL: string;
 }
 
+export interface ICreateUserData {
+  uid: string;
+  displayName: string;
+  email: string;
+  photoURL: string;
+}
+
 export interface IPostData {
   id: string;
   title: string;

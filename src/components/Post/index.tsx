@@ -12,6 +12,7 @@ declare global {
     seconds: number;
   }
 }
+
 const Post: React.FC<postData> = ({ post }) => {
   const { id, content, title, comments, stars, user, createdAt } = post;
   const postRef = firestore.doc(`posts/${id}`);

@@ -11,6 +11,7 @@ import {
   firebaseSignInWithGoogle,
   firebaseCreateUserWithEmailAndPassword,
   firebaseSignInWithFacebook,
+  createUserProfileDocument,
 } from '../config/firebase';
 
 interface AuthContextData {
@@ -44,8 +45,11 @@ const AuthProvider: React.FC = ({ children }) => {
   );
 
   useEffect(() => {
-    unregisterAuthObserver = auth.onAuthStateChanged(loggedUser => {
-      setUser(loggedUser as IUserData);
+    unregisterAuthObserver = auth.onAuthStateChanged(async loggedUser => {
+      const createdUser =
+        loggedUser && (await createUserProfileDocument(loggedUser));
+
+      setUser(createdUser as IUserData);
     });
 
     return () => {

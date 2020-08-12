@@ -6,6 +6,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { Container, Content, Background, AnimationContainer } from './styles';
 import logoImg from '../../assets/logo.png';
 import { useAuth } from '../../hooks/auth';
+import { createUserProfileDocument } from '../../config/firebase';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,18 +33,26 @@ const useStyles = makeStyles((theme: Theme) =>
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [name, setName] = useState<string>('');
+  const [displayName, setDisplayName] = useState<string>('');
   const classes = useStyles();
   const { createAccountWithEmailAndPassword } = useAuth();
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const test = await createAccountWithEmailAndPassword(email, password);
-    console.log(test);
+    try {
+      const { user } = await createAccountWithEmailAndPassword(email, password);
+      const photoURL = `https://api.adorable.io/avatars/200/${displayName}.png`;
+
+      user &&
+        (await createUserProfileDocument(user, { displayName, photoURL }));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('error creating account: ', error.message);
+    }
 
     setEmail('');
     setPassword('');
-    setName('');
+    setDisplayName('');
   };
   return (
     <Container>
@@ -58,20 +67,21 @@ const SignUp: React.FC = () => {
           <h1 style={{ color: '#3f51b5' }}>Criar Conta</h1>
           <Grid container className={classes.root} spacing={2} justify="center">
             <Grid item xs={10} md={12}>
-              <form onSubmit={handleSignUp}>
+              <form onSubmit={handleSignUp} autoComplete="off">
                 <Grid container justify="center" spacing={2} direction="column">
                   <TextField
                     label="Nome"
                     name="name"
-                    value={name}
+                    value={displayName}
                     className={classes.textField}
                     onChange={e => {
-                      setName(e.target.value);
+                      setDisplayName(e.target.value);
                     }}
                   />
                   <TextField
                     label="Email"
                     name="email"
+                    type="email"
                     value={email}
                     className={classes.textField}
                     onChange={e => {
