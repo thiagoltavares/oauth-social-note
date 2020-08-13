@@ -13,6 +13,7 @@ const PostProvider: React.FC = ({ children }) => {
   useEffect(() => {
     unregisterAuthObserver = firestore
       .collection('posts')
+      .orderBy('createdAt', 'desc')
       .withConverter(PostConverter)
       .onSnapshot(docs => {
         const data: IPostData[] = [];

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, ButtonBase, Grid, Paper, Typography } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import { IUserData } from '../../interfaces';
 import { auth } from '../../config/firebase';
 
@@ -64,9 +65,11 @@ const UserCard: React.FC<IUserCardProps> = ({ user }) => {
           <Grid item xs={12} sm container className={classes.infoContainer}>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
-                <Typography gutterBottom variant="subtitle1">
-                  {user.displayName}
-                </Typography>
+                <Link to="/profile">
+                  <Typography gutterBottom variant="subtitle1">
+                    {user.displayName}
+                  </Typography>
+                </Link>
                 <Typography variant="body2" gutterBottom>
                   {user.email}
                 </Typography>
