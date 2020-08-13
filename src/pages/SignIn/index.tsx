@@ -65,6 +65,7 @@ const SignIn: React.FC = () => {
             className={classes.root}
             spacing={2}
             justify="center"
+            item
             md={10}
           >
             <Grid item xs={10} md={12}>

@@ -54,7 +54,7 @@ const UserCard: React.FC<IUserCardProps> = ({ user }) => {
   }
 
   return (
-    <div>
+    <div style={{ marginTop: 36 }}>
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item>

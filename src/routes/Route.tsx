@@ -28,7 +28,8 @@ const Route: React.FC<RouteProps> = ({
         ) : (
           <Redirect
             to={{
-              pathname: isPrivate ? '/' : '/posts',
+              // FIXME Lembrar de arrumar o /profile para /posts
+              pathname: isPrivate ? '/' : '/profile',
               state: { from: location },
             }}
           />
