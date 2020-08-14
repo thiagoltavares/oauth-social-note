@@ -46,6 +46,12 @@ export const firebaseCreateUserWithEmailAndPassword = (
   return auth.createUserWithEmailAndPassword(email, password);
 };
 
+export const getUserRef = (
+  uid: string,
+): firebase.firestore.DocumentReference<ICreateUserData> => {
+  return firestore.collection(`users`).withConverter(UserConverter).doc(uid);
+};
+
 export const getUserDocument = async (
   uid: string,
 ): Promise<ICreateUserData | void> => {

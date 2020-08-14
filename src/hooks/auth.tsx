@@ -5,13 +5,13 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import { IUserData, AuthContextData } from '../interfaces';
+import { IUserData, AuthContextData, ICreateUserData } from '../interfaces';
 import {
   auth,
   firebaseSignInWithGoogle,
   firebaseCreateUserWithEmailAndPassword,
   firebaseSignInWithFacebook,
-  createUserProfileDocument,
+  getUserRef,
 } from '../config/firebase';
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -21,6 +21,8 @@ const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<IUserData>(
     () => auth.currentUser as IUserData,
   );
+
+  // const userRef = getUserRef(user.uid);
   const signOut = useCallback(() => auth.signOut(), []);
   const signInWithGoogle = useCallback(() => firebaseSignInWithGoogle(), []);
   const signInWithFacebook = useCallback(
@@ -47,10 +49,18 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     unregisterAuthObserver = auth.onAuthStateChanged(async loggedUser => {
-      const createdUser =
-        loggedUser && (await createUserProfileDocument(loggedUser));
+      const userRef = loggedUser && getUserRef(loggedUser.uid);
 
-      setUser(createdUser as IUserData);
+      userRef &&
+        userRef.onSnapshot(snapshot => {
+          const {
+            displayName,
+            email,
+            photoURL,
+          } = snapshot.data() as ICreateUserData;
+
+          setUser({ displayName, email, photoURL, uid: userRef.id });
+        });
     });
 
     return () => {
