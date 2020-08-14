@@ -1,12 +1,13 @@
 import styled, { keyframes } from 'styled-components';
-import { shade } from 'polished';
+import { Form } from '@unform/web';
 
-import signUpBackground from '../../assets/sign-up-background.jpeg';
+import { shade } from 'polished';
 
 export const Container = styled.div`
   height: 100vh;
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Content = styled.div`
@@ -18,14 +19,12 @@ export const Content = styled.div`
   max-width: 700px;
 `;
 
-const appearFromRight = keyframes`
+const shadeAnimation = keyframes`
   from {
     opacity: 0;
-    transform: translateX(50px)
   }
   to {
     opacity: 1;
-    transform: translateX(0)
   }
 `;
 
@@ -34,27 +33,10 @@ export const AnimationContainer = styled.div`
   flex-direction: column;
   align-items: center;
   place-content: center;
+  animation: ${shadeAnimation} 2s;
   max-width: 450px;
   width: 100%;
-  animation: ${appearFromRight} 1s;
 
-  form {
-    margin: 80px 0;
-    text-align: center;
-    h1 {
-      margin-bottom: 24px;
-    }
-    a {
-      color: #f4ede8;
-      display: block;
-      margin-top: 24px;
-      text-decoration: none;
-      transition: color 0.2s;
-      &:hover {
-        color: ${shade(0.2, '#f4ede8')};
-      }
-    }
-  }
   > a {
     color: #3f51b5;
     font-size: 19px;
@@ -73,8 +55,6 @@ export const AnimationContainer = styled.div`
   }
 `;
 
-export const Background = styled.section`
-  flex: 1;
-  background: url(${signUpBackground}) no-repeat center;
-  background-size: cover;
+export const SigUpForm = styled(Form)`
+  width: 100%;
 `;

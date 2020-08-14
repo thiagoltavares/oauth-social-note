@@ -1,12 +1,13 @@
 import styled, { keyframes } from 'styled-components';
-import { shade } from 'polished';
+import { Form } from '@unform/web';
 
-import signInBackground from '../../assets/sign-in-background.jpg';
+import { shade } from 'polished';
 
 export const Container = styled.div`
   height: 100vh;
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Content = styled.div`
@@ -18,14 +19,12 @@ export const Content = styled.div`
   max-width: 700px;
 `;
 
-const appearFromLeft = keyframes`
+const shadeAnimation = keyframes`
   from {
     opacity: 0;
-    transform: translateX(-50px)
   }
   to {
     opacity: 1;
-    transform: translateX(0)
   }
 `;
 
@@ -34,12 +33,12 @@ export const AnimationContainer = styled.div`
   flex-direction: column;
   align-items: center;
   place-content: center;
-  animation: ${appearFromLeft} 1s;
+  animation: ${shadeAnimation} 1s;
   max-width: 450px;
   width: 100%;
 
   > a {
-    color: rgb(203, 63, 34);
+    color: #3f51b5;
     font-size: 19px;
     display: block;
     margin-top: 24px;
@@ -51,13 +50,11 @@ export const AnimationContainer = styled.div`
       margin-right: 16px;
     }
     &:hover {
-      color: ${shade(0.2, 'rgb(203, 63, 34)')};
+      color: ${shade(0.2, '#3f51b5')};
     }
   }
 `;
 
-export const Background = styled.section`
-  flex: 1;
-  background: url(${signInBackground}) no-repeat center;
-  background-size: cover;
+export const SigInForm = styled(Form)`
+  width: 100%;
 `;
