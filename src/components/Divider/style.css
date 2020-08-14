@@ -1,8 +1,8 @@
 .divide-container{
   display: flex;
-    align-items: center;
-    margin: 20px 0;
-
+  align-items: center;
+  margin: 20px 0;
+  width: 100%;
 }
 
 .divide-border{

@@ -1,65 +1,69 @@
-import React, { useState } from 'react';
-import { Grid, TextField, Button } from '@material-ui/core/';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
-import { Container, Content, Background, AnimationContainer } from './styles';
+import { FiLock, FiMail, FiUser, FiArrowLeft } from 'react-icons/fi';
+import { Container, Content, AnimationContainer, SigUpForm } from './styles';
 import logoImg from '../../assets/logo.png';
 import { useAuth } from '../../hooks/auth';
 import { createUserProfileDocument } from '../../config/firebase';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      height: 140,
-      width: 100,
-    },
-    control: {
-      padding: theme.spacing(2),
-    },
-    button: {
-      marginTop: theme.spacing(3),
-      height: 48,
-    },
-    textField: {
-      marginTop: theme.spacing(1),
-    },
-  }),
-);
+interface HandleSignUpData {
+  displayName: string;
+  email: string;
+  password: string;
+}
 
 const SignUp: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [displayName, setDisplayName] = useState<string>('');
-  const classes = useStyles();
   const { createAccountWithEmailAndPassword } = useAuth();
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
 
-    try {
-      const { user } = await createAccountWithEmailAndPassword(email, password);
-      const photoURL = `https://api.adorable.io/avatars/200/${displayName}.png`;
+  const handleSignUp = useCallback(
+    async (data: HandleSignUpData): Promise<void> => {
+      const { displayName, email, password } = data;
+      // TODO validate data with yup
 
-      user &&
-        (await createUserProfileDocument(user, { displayName, photoURL }));
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('error creating account: ', error.message);
-    }
+      try {
+        const { user } = await createAccountWithEmailAndPassword(
+          email,
+          password,
+        );
+        const photoURL = `https://api.adorable.io/avatars/200/${displayName}.png`;
+        user &&
+          (await createUserProfileDocument(user, { displayName, photoURL }));
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('error creating account: ', error.message);
+      }
+    },
+    [createAccountWithEmailAndPassword],
+  );
 
-    setEmail('');
-    setPassword('');
-    setDisplayName('');
-  };
   return (
     <Container>
-      <Background />
       <Content>
         <AnimationContainer>
-          <img
+          <img src={logoImg} alt="Logo" style={{ marginBottom: 10 }} />
+          <h1 style={{ color: '#3f51b5', marginBottom: 48 }}>Crie sua conta</h1>
+          <SigUpForm onSubmit={handleSignUp}>
+            <Input
+              icon={FiUser}
+              name="displayName"
+              placeholder="Digite seu nome."
+            />
+            <Input icon={FiMail} name="email" placeholder="Digite seu email." />
+            <Input
+              icon={FiLock}
+              name="password"
+              type="password"
+              placeholder="Digite sua senha."
+            />
+            <Button type="submit">Criar</Button>
+          </SigUpForm>
+          <Link to="/">
+            <FiArrowLeft />
+            Voltar para home
+          </Link>
+          {/* <img
             src={logoImg}
             alt="message"
             style={{ width: '200px', marginBottom: 10 }}
@@ -119,7 +123,7 @@ const SignUp: React.FC = () => {
           <Link to="/">
             <FiArrowLeft />
             Voltar
-          </Link>
+          </Link> */}
         </AnimationContainer>
       </Content>
     </Container>

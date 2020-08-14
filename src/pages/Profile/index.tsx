@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useCallback, ChangeEvent } from 'react';
 import { Form } from '@unform/web';
-import { FiUser, FiMail } from 'react-icons/fi';
-import * as Yup from 'yup';
+import { FiUser, FiMail, FiCamera } from 'react-icons/fi';
 import { useAuth } from '../../hooks/auth';
-
-import UserCard from '../../components/UserCard';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import { Container } from './styles';
+import { Container, AvatarInput } from './styles';
+import { firestore } from '../../config/firebase';
+import UserCard from '../../components/UserCard';
 
 interface UserInfoUpdateProps {
   displayName: string;
@@ -18,50 +17,59 @@ interface UserInfoUpdateProps {
 const Profile: React.FC = () => {
   const { currentUser } = useAuth();
 
-  const handleSubmit = async (data: UserInfoUpdateProps): Promise<void> => {
-    try {
-      const schema = Yup.object().shape({
-        displayName: Yup.string().required(),
-        email: Yup.string().required().email('digite um email valido'),
-      });
+  const getUserRef = useCallback(() => {
+    return firestore.doc(`users/${currentUser.uid}`);
+  }, [currentUser.uid]);
 
-      await schema.validate(data, { abortEarly: true });
+  const handleSubmit = useCallback(
+    async (data: UserInfoUpdateProps): Promise<void> => {
+      try {
+        await getUserRef().update(data);
+      } catch (err) {
+        // console.error({ err });
+      }
+    },
+    [getUserRef],
+  );
 
-      console.log(data);
-    } catch (err) {
-      console.error({ err });
+  const handleAvatarChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const data = new FormData();
+
+      data.append('avatar', e.target.files[0]);
     }
-  };
-
-  const handleSubmitAvatar = (data: object): void => {
-    console.log(data);
-  };
+  }, []);
 
   const { displayName, email } = currentUser;
 
   return (
-    <>
+    <Container>
       <UserCard user={currentUser} />
-      <Container>
-        <Form
-          onSubmit={handleSubmit}
-          initialData={{
-            displayName,
-            email,
-          }}
-        >
-          <Input icon={FiUser} name="displayName" />
-          <Input icon={FiMail} name="email" />
-          <Button type="submit">Atualizar Cadastro</Button>
-        </Form>
-      </Container>
-      <Container>
-        <Form onSubmit={handleSubmitAvatar}>
-          <Input name="photoURL" type="file" placeholder={email} />
-          <Button type="submit">Atualizar Avatar</Button>
-        </Form>
-      </Container>
-    </>
+      <AvatarInput>
+        <img src={currentUser.photoURL} alt={currentUser.displayName} />
+        <label htmlFor="avatar">
+          <FiCamera />
+          <input
+            type="file"
+            name=""
+            id="avatar"
+            accept="image/jpeg, image/png"
+            onChange={handleAvatarChange}
+          />
+        </label>
+      </AvatarInput>
+      <Form
+        onSubmit={handleSubmit}
+        initialData={{
+          displayName,
+          email,
+        }}
+      >
+        <Input icon={FiUser} name="displayName" />
+        <Input icon={FiMail} name="email" />
+        <Button type="submit">Atualizar Cadastro</Button>
+      </Form>
+    </Container>
   );
 };
 
